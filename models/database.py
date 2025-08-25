@@ -92,3 +92,54 @@ def get_all_weather_data():
         raise e
     finally:
         conn.close()
+
+def get_weather_data_by_location(latitude, longitude, days=2):
+    # Get weather data for a specific location from the last N days
+    conn = get_db_connection()
+    try:
+        cursor = conn.execute('''
+            SELECT timestamp, latitude, longitude, temperature_2m, relative_humidity_2m
+            FROM weather_data
+            WHERE latitude = ? AND longitude = ?
+            AND datetime(timestamp) >= datetime('now', '-{} days')
+            ORDER BY timestamp DESC
+        '''.format(days), (latitude, longitude))
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
+    except Exception as e:
+        raise e
+    finally:
+        conn.close()
+
+def get_latest_location_data():
+    # Get weather data for the most recently added location (last 48 hours)
+    conn = get_db_connection()
+    try:
+        # First, get the most recent location (lat, lon) from the database
+        cursor = conn.execute('''
+            SELECT latitude, longitude
+            FROM weather_data
+            ORDER BY created_at DESC
+            LIMIT 1
+        ''')
+        latest_location = cursor.fetchone()
+        
+        if not latest_location:
+            return []
+        
+        lat, lon = latest_location['latitude'], latest_location['longitude']
+        
+        # Now get all data for this location from the last 48 hours
+        cursor = conn.execute('''
+            SELECT timestamp, latitude, longitude, temperature_2m, relative_humidity_2m
+            FROM weather_data
+            WHERE latitude = ? AND longitude = ?
+            AND datetime(timestamp) >= datetime('now', '-2 days')
+            ORDER BY timestamp DESC
+        ''', (lat, lon))
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
+    except Exception as e:
+        raise e
+    finally:
+        conn.close()

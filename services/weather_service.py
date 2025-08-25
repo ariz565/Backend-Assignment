@@ -1,8 +1,13 @@
-import requests  
-from datetime import datetime, timedelta  
-from flask import request, jsonify  
+# Standard library imports
+from datetime import datetime, timedelta
+
+# Third-party imports
+import requests
+from flask import request, jsonify
+
+# Local imports
+from config import Config
 from models.database import insert_weather_data  
-from config import Config  
 
 
 # Endpoint function for weather report - GET /weather-report?lat={lat}&lon={lon}
@@ -23,11 +28,11 @@ def weather_report_endpoint():
         if result['status'] == 'success':
             return jsonify(result), 200
         else:
-            print(f"❌ Weather data fetch failed: {result.get('message', 'Unknown error')}")  # Debug logging
+            # print(f"Weather data fetch failed: {result.get('message', 'Unknown error')}")  # Debug logging
             return jsonify(result), 500
             
     except Exception as e:
-        print(f"❌ Internal server error in weather_report_endpoint: {str(e)}")  # Debug logging
+        # print(f"Internal server error in weather_report_endpoint: {str(e)}")  # Debug logging
         return jsonify({
             'error': f'Internal server error: {str(e)}',
             'status': 'error'
@@ -94,7 +99,6 @@ def fetch_weather_data(latitude, longitude):
 
 def process_weather_data(api_response, latitude, longitude):
     # Process the API response and prepare data for database insertion
-    # Follows SRP: Only responsible for data transformation
     
     hourly_data = api_response.get('hourly', {})  # Extract hourly data section
     timestamps = hourly_data.get('time', [])  # Get time array
@@ -122,18 +126,18 @@ def fetch_and_store_weather_data(latitude, longitude):
     
     try:
         # Step 1: Fetch data from external API
-        print(f"🌤️ Fetching weather data for lat={latitude}, lon={longitude}")  # Debug logging
+        # print(f"Fetching weather data for lat={latitude}, lon={longitude}")  # Debug logging
         api_response = fetch_weather_data(latitude, longitude)  # Call API fetch function
         
         # Step 2: Transform data for storage
-        print(f"🔄 Processing API response data")  # Debug logging
+        # print(f"Processing API response data")  # Debug logging
         processed_data = process_weather_data(api_response, latitude, longitude)  # Call data processor
         
         # Step 3: Persist data
-        print(f"💾 Storing {len(processed_data)} records in database")  # Debug logging
+        # print(f"Storing {len(processed_data)} records in database")  # Debug logging
         insert_weather_data(processed_data)  # Call database insert function
         
-        print(f"✅ Successfully completed weather data fetch and store")  # Debug logging
+        # print(f"Successfully completed weather data fetch and store")  # Debug logging
         return {
             'status': 'success',
             'message': f'Successfully stored {len(processed_data)} weather records',
@@ -144,7 +148,7 @@ def fetch_and_store_weather_data(latitude, longitude):
         }
         
     except Exception as e:
-        print(f"❌ Error in fetch_and_store_weather_data: {str(e)}")  # Debug logging
+        # print(f"Error in fetch_and_store_weather_data: {str(e)}")  # Debug logging
         return {
             'status': 'error',
             'message': str(e)

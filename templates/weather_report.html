@@ -1,219 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Report</title>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Weather Data Report</title>
     <style>
-        * {{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }}
-        body {{
-            font-family: Arial, Helvetica, sans-serif;
-            line-height: 1.5;
-            color: #2c3e50;
-            background: #f8f9fa;
-            padding: 20px;
-        }}
-        .container {{
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }}
-        .header {{
-            background: #34495e;
-            color: white;
-            text-align: center;
-            padding: 30px 20px;
-            border-bottom: 3px solid #2c3e50;
-        }}
-        .header h1 {{
-            font-size: 2.2em;
-            font-weight: 400;
-            margin-bottom: 8px;
-        }}
-        .header h2 {{
-            font-size: 1.1em;
-            font-weight: 300;
-            opacity: 0.9;
-        }}
-        .content {{
-            padding: 30px;
-        }}
-        .location-header {{
-            background: #ecf0f1;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 6px;
-            border-left: 4px solid #34495e;
-        }}
-        .location-header h3 {{
-            color: #2c3e50;
-            font-size: 1.4em;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }}
-        .location-header p {{
-            color: #7f8c8d;
-            font-size: 0.95em;
-        }}
-        .metadata {{
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-        }}
-        .metadata h4 {{
-            color: #2c3e50;
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            font-weight: 500;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 8px;
-        }}
-        .metadata p {{
-            margin-bottom: 8px;
-            font-size: 0.95em;
-            color: #495057;
-        }}
-        .metadata strong {{
-            color: #2c3e50;
-            font-weight: 600;
-        }}
-        .stats {{
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin: 25px 0;
-        }}
-        .stat-box {{
-            flex: 1;
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 6px;
-            border: 1px solid #dee2e6;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }}
-        .stat-box h4 {{
-            color: #6c757d;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }}
-        .stat-box p {{
-            font-size: 2em;
-            font-weight: 600;
-            color: #2c3e50;
-            margin: 0;
-        }}
-        .page-break {{
-            page-break-before: always;
-            margin-top: 40px;
-        }}
-        .chart-section {{
-            margin: 40px 20px 20px 20px;
-            padding: 30px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e9ecef;
-        }}
-        .chart-section h3 {{
-            color: #2c3e50;
-            font-size: 1.4em;
-            margin-bottom: 25px;
-            font-weight: 500;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ecf0f1;
-        }}
-        .chart-description {{
-            text-align: center;
-            color: #6c757d;
-            margin-bottom: 20px;
-        }}
-        .chart {{
-            background: #ffffff;
-            border-radius: 6px;
-            padding: 20px;
-            border: 1px solid #e9ecef;
-            margin-top: 20px;
-        }}
-        .chart img {{
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }}
-        .footer {{
-            background: #ecf0f1;
-            padding: 20px;
-            text-align: center;
-            color: #6c757d;
-            font-size: 0.85em;
-            border-top: 1px solid #dee2e6;
-        }}
-        .footer-note {{
-            margin-top: 5px;
-            font-size: 0.8em;
-        }}
+      body {
+         {
+          font-family: "Arial", sans-serif;
+          margin: 40px;
+          line-height: 1.6;
+          color: #333;
+        }
+      }
+
+      .header {
+         {
+          text-align: center;
+          border-bottom: 3px solid #3498db;
+          padding-bottom: 20px;
+          margin-bottom: 30px;
+        }
+      }
+
+      .header h1 {
+         {
+          color: #2c3e50;
+          font-size: 28px;
+          margin-bottom: 10px;
+        }
+      }
+
+      .metadata {
+         {
+          background-color: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 30px;
+          border-left: 4px solid #3498db;
+        }
+      }
+
+      .metadata table {
+         {
+          width: 100%;
+          border-collapse: collapse;
+        }
+      }
+
+      .metadata td {
+         {
+          padding: 8px 15px;
+          border-bottom: 1px solid #ddd;
+        }
+      }
+
+      .metadata td:first-child {
+         {
+          font-weight: bold;
+          color: #2c3e50;
+          width: 30%;
+        }
+      }
+
+      .chart-container {
+         {
+          text-align: center;
+          margin: 30px 0;
+        }
+      }
+
+      .chart-container img {
+         {
+          max-width: 100%;
+          height: auto;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      .footer {
+         {
+          margin-top: 40px;
+          text-align: center;
+          font-size: 12px;
+          color: #7f8c8d;
+          border-top: 1px solid #ecf0f1;
+          padding-top: 20px;
+        }
+      }
+
+      .summary {
+         {
+          background-color: #e8f6f3;
+          padding: 15px;
+          border-radius: 6px;
+          margin-bottom: 20px;
+          border-left: 4px solid #27ae60;
+        }
+      }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Weather Analytics Report</h1>
-            <h2>Professional Climate Data Analysis</h2>
-        </div>
-
-        <div class="content">
-            <div class="location-header">
-                <h3>📍 {location}</h3>
-                <p>Weather data analysis for the specified location</p>
-            </div>
-
-            <div class="metadata">
-                <h4>Report Information</h4>
-                <p><strong>Analysis Period:</strong> {date_range}</p>
-                <p><strong>Generated:</strong> {generated_time}</p>
-                <p><strong>Total Data Points:</strong> {total_records} hourly measurements</p>
-                <p><strong>Data Source:</strong> Open-Meteo Weather API</p>
-            </div>
-
-            <div class="stats">
-                <div class="stat-box">
-                    <h4>Average Temperature</h4>
-                    <p>{avg_temp}°C</p>
-                </div>
-                <div class="stat-box">
-                    <h4>Average Humidity</h4>
-                    <p>{avg_humidity}%</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="page-break chart-section">
-            <h3>Weather Trends Analysis</h3>
-            <p class="chart-description">
-                Detailed visualization of temperature and humidity patterns over time
-            </p>
-            <div class="chart">
-                <img src="data:image/png;base64,{chart_base64}" alt="Weather Trends Chart" />
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>Generated by Weather Analytics Service | Powered by Open-Meteo API | {generated_time}</p>
-            <p class="footer-note">This report contains automated analysis of weather data</p>
-        </div>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Weather Data Report</h1>
+      <p>Comprehensive Weather Analysis</p>
     </div>
-</body>
+
+    <div class="metadata">
+      <h3 style="margin-top: 0; color: #2c3e50">Report Metadata</h3>
+      <table>
+        <tr>
+          <td>Location:</td>
+          <td>Latitude: {latitude}°, Longitude: {longitude}°</td>
+        </tr>
+        <tr>
+          <td>Date Range:</td>
+          <td>{date_range}</td>
+        </tr>
+        <tr>
+          <td>Total Records:</td>
+          <td>{record_count} hourly measurements</td>
+        </tr>
+        <tr>
+          <td>Generated:</td>
+          <td>{generated_time}</td>
+        </tr>
+        <tr>
+          <td>Data Source:</td>
+          <td>Open-Meteo Weather API</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="summary">
+      <h3 style="margin-top: 0; color: #27ae60">Summary</h3>
+      <p>
+        This report contains weather data analysis for the specified location
+        over the past 48 hours. The charts below show temperature and humidity
+        trends, providing insights into recent weather patterns.
+      </p>
+    </div>
+
+    <div class="chart-container">
+      <h3 style="color: #2c3e50; margin-bottom: 20px">
+        Weather Trends Analysis
+      </h3>
+      <img
+        src="data:image/png;base64,{chart_base64}"
+        alt="Weather Data Chart"
+      />
+    </div>
+
+    <div class="footer">
+      <p>Generated by Weather API Service | Data provided by Open-Meteo</p>
+      <p>This report contains automated analysis of weather data</p>
+    </div>
+  </body>
 </html>

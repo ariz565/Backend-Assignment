@@ -1,157 +1,239 @@
-# Weather Data Service
+# Weather Data Service API
 
-A Flask-based backend service that fetches time-series weather data from the Open-Meteo API and generates Excel files and PDF reports with charts.
+A Flask-based REST API service that fetches weather data from the Open-Meteo API and provides Excel and PDF export capabilities with integrated charts.
 
-## Features
+## Overview
 
-- 🌤️ Fetch weather data (temperature & humidity) from Open-Meteo MeteoSwiss API
-- 💾 Store data in SQLite database
-- 📊 Export data to Excel format
-- 📄 Generate PDF reports with weather charts
-- 🔍 RESTful API endpoints
-- 🧹 Clean, modular code structure
+This service provides a comprehensive weather data solution with:
 
-## Project Structure
+- Real-time weather data fetching and storage
+- Excel export with formatted data
+- PDF report generation with embedded charts
+- RESTful API endpoints with comprehensive validation
+- Clean, modular architecture following best practices
+
+## Project Architecture
 
 ```
 assignment/
-├── app.py                 # Main Flask application with clean endpoints
-├── config.py             # Configuration settings
-├── requirements.txt      # Python dependencies
-├── test_api.py           # API testing script
+├── app.py                     # Main Flask application
+├── config.py                  # Application configuration
+├── requirements.txt           # Python dependencies
+├── test_api.py               # Comprehensive test suite
 ├── models/
-│   └── database.py       # Database operations and models
+│   └── database.py           # Database models and operations
 ├── services/
-│   ├── weather_service.py    # Weather API integration
-│   └── export_service.py     # Excel and PDF export functions
+│   ├── weather_service.py    # Weather API integration service
+│   └── export_service.py     # Excel and PDF export service
 ├── templates/
-│   └── weather_report.html  # PDF report HTML template
+│   └── weather_report.html   # HTML template for PDF generation
 ├── utils/
-│   └── database_utils.py     # Database utilities and initialization
-├── exports/              # Generated export files
-└── venv/                 # Virtual environment
+│   └── database_utils.py     # Database utilities and setup
+└── exports/                  # Generated export files directory
 ```
 
 ## API Endpoints
 
-### 1. Weather Report
+| Endpoint          | Method | Description                  | Output                  |
+| ----------------- | ------ | ---------------------------- | ----------------------- |
+| `/health`         | GET    | Service health check         | JSON status             |
+| `/weather-report` | GET    | Fetch and store weather data | JSON response           |
+| `/export/excel`   | GET    | Generate Excel export        | Downloadable .xlsx file |
+| `/export/pdf`     | GET    | Generate PDF report          | Downloadable .pdf file  |
 
-```
-GET /weather-report?lat={latitude}&lon={longitude}
-```
+## Quick Start Guide
 
-- Fetches weather data for the past 2 days
-- Stores data in SQLite database
-- Returns operation status and record count
+### Step 1: System Prerequisites
 
-**Example:**
+**Required:**
 
-```bash
-curl "http://localhost:5000/weather-report?lat=47.37&lon=8.55"
-```
+- Python 3.8 or higher
+- Internet connection for API access
 
-### 2. Excel Export
+**For PDF Generation (Windows only):**
 
-```
-GET /export/excel
-```
+- GTK3 Runtime Environment
 
-- Exports last 48 hours of weather data as Excel file
-- Returns downloadable .xlsx file
-- Columns: timestamp | latitude | longitude | temperature_2m | relative_humidity_2m
+### Step 2: GTK3 Setup (Windows Users)
 
-**Example:**
+PDF generation requires GTK3 and Pango on Windows for WeasyPrint to function correctly. Based on development experience with Windows, here are the working installation methods:
 
-```bash
-curl -O "http://localhost:5000/export/excel"
-```
+**Option A: Download GTK3 Runtime**
 
-### 3. PDF Report
+1. Visit [GTK for Windows](https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer)
+2. Download and install the latest GTK3 Runtime Environment
+3. Restart your command prompt
 
-```
-GET /export/pdf
-```
-
-- Generates PDF report with weather charts
-- Includes metadata (location, date range, statistics)
-- Returns downloadable .pdf file with temperature and humidity line charts
-
-**Example:**
+**Option B: Install via MSYS2 (Recommended)**
 
 ```bash
-curl -O "http://localhost:5000/export/pdf"
+# Install MSYS2 first, then run:
+pacman -S mingw-w64-x86_64-pango
 ```
 
-### 4. Health Check
+**Note:** During development on Windows, it was necessary to install Pango separately for WeasyPrint PDF generation to work properly. This is documented in the [WeasyPrint installation guide](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#windows). The MSYS2 method includes both GTK3 and Pango dependencies.
 
-```
-GET /health
-```
-
-- Simple health check endpoint
-- Returns service status
-
-## Installation & Setup
-
-### Prerequisites
-
-- Python 3.8+
-- Virtual environment (recommended)
-
-### Install Dependencies
+### Step 3: Environment Setup
 
 ```bash
-# Create virtual environment
+# 1. Clone or download the project
+cd assignment
+
+# 2. Create virtual environment
 python -m venv venv
 
-# Activate virtual environment
+# 3. Activate virtual environment
 # Windows:
 venv\Scripts\activate
 # Linux/macOS:
 source venv/bin/activate
 
-# Install dependencies
+# 4. Install dependencies
 pip install -r requirements.txt
 ```
 
-### Run the Application
+### Step 4: Start the Service
 
 ```bash
-# Make sure virtual environment is activated
-# Windows: venv\Scripts\activate
-# Linux/macOS: source venv/bin/activate
-
+# Ensure virtual environment is activated
 python app.py
 ```
 
-The service will be available at `http://localhost:5000`
+You should see:
 
-## Usage Examples
+```
+* Running on http://127.0.0.1:5000
+* Debug mode: on
+```
+
+### Step 5: Verify Installation
+
+Open a new terminal and test the health endpoint:
+
+```bash
+curl http://localhost:5000/health
+```
+
+Expected response:
+
+```json
+{
+  "service": "weather-api",
+  "status": "healthy"
+}
+```
+
+## Usage Instructions
 
 ### 1. Fetch Weather Data
 
+**Endpoint:** `GET /weather-report`
+
+**Parameters:**
+
+- `lat` (required): Latitude (-90 to 90)
+- `lon` (required): Longitude (-180 to 180)
+
+**Example:**
+
 ```bash
-# Fetch data for Zurich, Switzerland
+# Fetch weather data for Zurich, Switzerland
 curl "http://localhost:5000/weather-report?lat=47.37&lon=8.55"
 ```
 
-### 2. Download Excel Report
+**Response:**
+
+```json
+{
+  "latitude": 47.37,
+  "longitude": 8.55,
+  "message": "Weather data fetched and stored successfully",
+  "records_added": 72,
+  "status": "success"
+}
+```
+
+### 2. Export to Excel
+
+**Endpoint:** `GET /export/excel`
+
+Generates Excel file with the latest weather data.
 
 ```bash
-# Download Excel file
 curl -O -J "http://localhost:5000/export/excel"
 ```
 
-### 3. Download PDF Report
+**Output:** `weather_data.xlsx` saved in `exports/` folder
+
+- Contains timestamped weather data
+- Auto-formatted columns for readability
+- Includes location coordinates and measurements
+
+### 3. Generate PDF Report
+
+**Endpoint:** `GET /export/pdf`
+
+Creates professional PDF report with charts.
 
 ```bash
-# Download PDF report
 curl -O -J "http://localhost:5000/export/pdf"
 ```
 
-## Technical Details
+**Output:** `weather_report.pdf` saved in `exports/` folder
 
-### Database Schema
+- Layout with metadata
+- Temperature and humidity trend charts
+- Location and time range information
+
+## Testing the API
+
+### Automated Test Suite
+
+Run the comprehensive test suite:
+
+```bash
+python test_api.py
+```
+
+The test suite validates:
+
+- ✅ Health endpoint functionality
+- ✅ Weather data fetching for multiple locations
+- ✅ Input validation and error handling
+- ✅ Excel export generation
+- ✅ PDF report creation
+- ✅ Concurrent request handling
+- ✅ Response time performance
+
+### Manual Testing
+
+**1. Test Health Check:**
+
+```bash
+curl "http://localhost:5000/health"
+```
+
+**2. Test Weather Data Fetching:**
+
+```bash
+curl "http://localhost:5000/weather-report?lat=40.7128&lon=-74.0060"
+```
+
+**3. Test Excel Export:**
+
+```bash
+curl -O "http://localhost:5000/export/excel"
+```
+
+**4. Test PDF Export:**
+
+```bash
+curl -O "http://localhost:5000/export/pdf"
+```
+
+## Database Schema
+
+The service uses SQLite with the following schema:
 
 ```sql
 CREATE TABLE weather_data (
@@ -165,106 +247,82 @@ CREATE TABLE weather_data (
 );
 ```
 
-### Technologies Used
+## Technology Stack
 
-- **Flask**: Web framework
-- **SQLite**: Database
-- **Requests**: HTTP client for API calls
-- **Pandas**: Data manipulation
-- **Matplotlib**: Chart generation
-- **WeasyPrint**: PDF generation
-- **OpenPyXL**: Excel file generation
+| Component           | Technology | Purpose               |
+| ------------------- | ---------- | --------------------- |
+| **Framework**       | Flask      | REST API server       |
+| **Database**        | SQLite     | Data storage          |
+| **HTTP Client**     | Requests   | External API calls    |
+| **Data Processing** | Pandas     | Data manipulation     |
+| **Charts**          | Matplotlib | Graph generation      |
+| **PDF Generation**  | WeasyPrint | PDF report creation   |
+| **Excel Export**    | OpenPyXL   | Excel file generation |
 
-### Code Organization
+## Output Files
 
-- **Clean separation of concerns**: Each module has a specific responsibility
-- **Function-based architecture**: Business logic separated from route handlers
-- **Error handling**: Comprehensive error handling with meaningful messages
-- **Configuration management**: Centralized configuration
-- **Database abstraction**: Clean database operations
+All generated files are saved in the `exports/` directory:
 
-## Example Output Files
-
-The service generates:
-
-- `weather_data.xlsx`: Excel file with timestamped weather data
-- `weather_report.pdf`: PDF report with charts and metadata
-
-## Development
-
-### Code Style
-
-- Clean, readable code with proper documentation
-- Function-based approach for better testability
-- Separation of API routes from business logic
-- Proper error handling and logging
-
-### Testing
-
-```bash
-# Test the endpoints
-curl "http://localhost:5000/health"
-curl "http://localhost:5000/weather-report?lat=47.37&lon=8.55"
-curl -O "http://localhost:5000/export/excel"
-curl -O "http://localhost:5000/export/pdf"
-```
-
-## Troubleshooting
-
-### Testing
-
-#### Automated Testing
-
-```bash
-# Run the comprehensive test script
-python test_api.py
-```
-
-#### Manual Testing
-
-```bash
-# Test health endpoint
-curl "http://localhost:5000/health"
-
-# Test weather data fetching
-curl "http://localhost:5000/weather-report?lat=47.37&lon=8.55"
-
-# Test Excel export
-curl -O "http://localhost:5000/export/excel"
-
-# Test PDF export
-curl -O "http://localhost:5000/export/pdf"
-```
+| File                 | Description                     | Format            |
+| -------------------- | ------------------------------- | ----------------- |
+| `weather_data.xlsx`  | Weather data export             | Excel spreadsheet |
+| `weather_report.pdf` | Professional report with charts | PDF document      |
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Import errors**: Make sure virtual environment is activated
-2. **API timeouts**: Check internet connection and API availability
-3. **PDF generation issues**: Ensure WeasyPrint dependencies are installed
-4. **Database errors**: Check file permissions and disk space
+**1. Import Errors**
 
-### Logs
+```
+Solution: Ensure virtual environment is activated
+Command: venv\Scripts\activate (Windows) or source venv/bin/activate (Linux/macOS)
+```
 
-Check the Flask console output for detailed error messages and debugging information.
+**2. API Connection Issues**
 
-## Future Enhancements
+```
+Solution: Check internet connection and Open-Meteo API availability
+Test: curl "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m"
+```
 
-- Add data validation and sanitization
-- Implement caching for API responses
-- Add authentication and rate limiting
-- Support for multiple locations
-- Real-time data updates
-- Docker containerization
+**3. PDF Generation Fails (Windows)**
 
-## WeasyPrint Setup (Windows)
+```text
+Error: WeasyPrint errors or missing dependencies
+Solution: Install GTK3 Runtime Environment and Pango
+Verification: Restart Flask service after GTK3 installation
+Note: Based on Windows development experience, Pango is specifically required for WeasyPrint
+```
 
-For PDF generation, WeasyPrint requires additional dependencies on Windows:
+**4. File Permission Errors**
 
-1. Install Python from Microsoft Store
-2. Install MSYS2, then run: `pacman -S mingw-w64-x86_64-pango`
-3. Install WeasyPrint via pip in your virtual environment
+```
+Solution: Ensure write permissions for exports/ directory
+Command: Check if exports/ folder exists and is writable
+```
 
+### Error Response Format
 
-For detailed setup instructions, see: https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#windows
+The API returns structured error responses:
+
+```json
+{
+  "error": "Description of the error",
+  "status": "error"
+}
+```
+
+### Getting Help
+
+1. **Check Flask Console**: Detailed error messages appear in the server console
+2. **Run Test Suite**: Use `python test_api.py` to identify specific issues
+3. **Verify Dependencies**: Ensure all packages in `requirements.txt` are installed
+4. **Check GTK3**: For PDF issues on Windows, verify GTK3 installation
+
+## Data Sources
+
+- **Weather Data**: [Open-Meteo API](https://open-meteo.com/) - MeteoSwiss provider
+- **Coverage**: Global weather data with hourly resolution
+- **Parameters**: 2-meter temperature and relative humidity
+- **Time Range**: Last 48 hours from request time

@@ -1,14 +1,32 @@
-from flask import Flask
-from services.weather_service import weather_report_endpoint
-from services.export_service import excel_export_endpoint, pdf_export_endpoint
-from utils.database_utils import initialize_database
+# Third-party imports
+from flask import Flask, request
+
+# Local imports
 from config import Config
+from services.export_service import excel_export_endpoint, pdf_export_endpoint
+from services.weather_service import weather_report_endpoint
+from utils.database_utils import initialize_database
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 # Initialize database on startup
 initialize_database()
+
+# Root endpoint: Welcome message and API information
+@app.route('/', methods=['GET'])
+def home():
+    return {
+        'message': 'Weather API Backend Server is Running! 🌤️',
+        'status': 'operational',
+        'endpoints': {
+            'health_check': '/health',
+            'weather_report': '/weather-report?lat=LAT&lon=LON',
+            'export_excel': '/export/excel (downloads Excel file)',
+            'export_pdf': '/export/pdf (downloads PDF file)'
+        },
+        'description': 'Backend Assignment - Weather Data API with Export Functionality'
+    }, 200
 
 # Endpoint 1: Fetch weather data from Open-Meteo API and store in database
 @app.route('/weather-report', methods=['GET'])
