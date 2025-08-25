@@ -123,6 +123,62 @@ Expected response:
 }
 ```
 
+## Docker Deployment (Alternative)
+
+For containerized deployment, you can use Docker instead of manual setup:
+
+### Prerequisites
+
+- Docker and Docker Compose installed
+- No need for Python, GTK3, or virtual environment setup
+
+### Quick Docker Start
+
+```bash
+# Clone/download the project
+cd assignment
+
+# Build and start the service
+docker-compose up --build
+
+# Or run in background
+docker-compose up -d --build
+```
+
+The service will be available at `http://localhost:5000`
+
+### Docker Commands
+
+```bash
+# Start the service
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the service
+docker-compose down
+
+# Rebuild and restart
+docker-compose up --build -d
+
+# Access container shell
+docker-compose exec weather-api bash
+```
+
+### Docker Features
+
+- **Automatic Dependencies**: All system dependencies (GTK3, Pango) pre-installed
+- **Persistent Storage**: Database and exports mounted as volumes
+- **Health Checks**: Built-in container health monitoring
+- **Easy Deployment**: Single command deployment
+- **Cross-Platform**: Works on Windows, macOS, and Linux
+  "service": "weather-api",
+  "status": "healthy"
+  }
+
+````
+
 ## Usage Instructions
 
 ### 1. Fetch Weather Data
@@ -139,7 +195,7 @@ Expected response:
 ```bash
 # Fetch weather data for Zurich, Switzerland
 curl "http://localhost:5000/weather-report?lat=47.37&lon=8.55"
-```
+````
 
 **Response:**
 

@@ -1,0 +1,28 @@
+# Docker Compose for Weather API Service
+version: "3.8"
+
+services:
+  weather-api:
+    build: .
+    container_name: weather-api-service
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount exports directory for persistent file storage
+      - ./exports:/app/exports
+      # Mount database for persistence
+      - ./weather_data.db:/app/weather_data.db
+    environment:
+      - FLASK_ENV=production
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    name: weather-api-network
