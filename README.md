@@ -125,6 +125,8 @@ Expected response:
 
 ## Docker Deployment (Alternative)
 
+⚠️ **Important Note**: Due to development environment constraints, the Docker setup is untested. **For reliable deployment, please use the manual setup process above.**
+
 For containerized deployment, you can use Docker instead of manual setup:
 
 ### Prerequisites
