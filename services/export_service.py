@@ -309,127 +309,214 @@ def create_pdf_html_template(chart_base64, latitude, longitude, date_range, reco
             <meta charset="utf-8">
             <title>Weather Data Report</title>
             <style>
+                @page {{
+                    margin: 2cm;
+                    size: A4;
+                }}
+                
                 body {{
-                    font-family: 'Arial', sans-serif;
-                    margin: 40px;
-                    line-height: 1.6;
-                    color: #333;
+                    font-family: 'Segoe UI', 'Arial', sans-serif;
+                    line-height: 1.5;
+                    color: #2c3e50;
+                    margin: 0;
+                    background: #ffffff;
                 }}
                 
                 .header {{
                     text-align: center;
-                    border-bottom: 3px solid #3498db;
-                    padding-bottom: 20px;
-                    margin-bottom: 30px;
+                    border-bottom: 2px solid #34495e;
+                    padding-bottom: 25px;
+                    margin-bottom: 35px;
                 }}
                 
                 .header h1 {{
+                    font-size: 32px;
+                    font-weight: 300;
                     color: #2c3e50;
-                    font-size: 28px;
-                    margin-bottom: 10px;
+                    margin: 0 0 8px 0;
+                    letter-spacing: -0.5px;
                 }}
                 
-                .metadata {{
-                    background-color: #f8f9fa;
+                .header .subtitle {{
+                    font-size: 16px;
+                    color: #7f8c8d;
+                    font-weight: 400;
+                    margin: 0;
+                }}
+                
+                .report-info {{
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 30px;
+                    margin-bottom: 35px;
+                }}
+                
+                .info-section {{
+                    background: #f8f9fa;
+                    border: 1px solid #e9ecef;
+                    border-radius: 6px;
                     padding: 20px;
-                    border-radius: 8px;
-                    margin-bottom: 30px;
-                    border-left: 4px solid #3498db;
                 }}
                 
-                .metadata table {{
-                    width: 100%;
-                    border-collapse: collapse;
-                }}
-                
-                .metadata td {{
-                    padding: 8px 15px;
-                    border-bottom: 1px solid #ddd;
-                }}
-                
-                .metadata td:first-child {{
-                    font-weight: bold;
+                .info-section h3 {{
+                    margin: 0 0 15px 0;
+                    font-size: 16px;
+                    font-weight: 600;
                     color: #2c3e50;
-                    width: 30%;
+                    border-bottom: 1px solid #dee2e6;
+                    padding-bottom: 8px;
+                }}
+                
+                .info-row {{
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 6px 0;
+                    border-bottom: 1px solid #f1f3f4;
+                }}
+                
+                .info-row:last-child {{
+                    border-bottom: none;
+                }}
+                
+                .info-label {{
+                    font-weight: 500;
+                    color: #495057;
+                    min-width: 120px;
+                }}
+                
+                .info-value {{
+                    color: #2c3e50;
+                    text-align: right;
+                    font-weight: 400;
+                }}
+                
+                .summary {{
+                    background: #f8f9fa;
+                    border-left: 4px solid #6c757d;
+                    padding: 20px;
+                    margin: 35px 0;
+                    border-radius: 0 6px 6px 0;
+                }}
+                
+                .summary h3 {{
+                    margin: 0 0 12px 0;
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: #2c3e50;
+                }}
+                
+                .summary p {{
+                    margin: 0;
+                    color: #495057;
+                    font-size: 14px;
+                    line-height: 1.6;
+                }}
+                
+                .chart-section {{
+                    margin: 40px 0;
+                    text-align: center;
+                }}
+                
+                .chart-section h3 {{
+                    font-size: 20px;
+                    font-weight: 500;
+                    color: #2c3e50;
+                    margin: 0 0 25px 0;
+                    text-align: center;
                 }}
                 
                 .chart-container {{
-                    text-align: center;
-                    margin: 30px 0;
+                    background: #ffffff;
+                    border: 1px solid #dee2e6;
+                    border-radius: 8px;
+                    padding: 20px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    display: inline-block;
+                    max-width: 100%;
                 }}
                 
                 .chart-container img {{
                     max-width: 100%;
                     height: auto;
-                    border: 1px solid #ddd;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    display: block;
                 }}
                 
                 .footer {{
-                    margin-top: 40px;
+                    margin-top: 50px;
+                    padding-top: 20px;
+                    border-top: 1px solid #dee2e6;
                     text-align: center;
                     font-size: 12px;
-                    color: #7f8c8d;
-                    border-top: 1px solid #ecf0f1;
-                    padding-top: 20px;
+                    color: #6c757d;
                 }}
                 
-                .summary {{
-                    background-color: #e8f6f3;
-                    padding: 15px;
-                    border-radius: 6px;
-                    margin-bottom: 20px;
-                    border-left: 4px solid #27ae60;
+                .footer p {{
+                    margin: 5px 0;
+                }}
+                
+                .generated-time {{
+                    font-style: italic;
+                    font-size: 11px;
+                    color: #adb5bd;
                 }}
             </style>
         </head>
         <body>
             <div class="header">
                 <h1>Weather Data Report</h1>
-                <p>Comprehensive Weather Analysis</p>
+                <p class="subtitle">Meteorological Analysis and Trends</p>
             </div>
             
-            <div class="metadata">
-                <h3 style="margin-top: 0; color: #2c3e50;">Report Metadata</h3>
-                <table>
-                    <tr>
-                        <td>Location:</td>
-                        <td>Latitude: {latitude}°, Longitude: {longitude}°</td>
-                    </tr>
-                    <tr>
-                        <td>Date Range:</td>
-                        <td>{date_range}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Records:</td>
-                        <td>{record_count} hourly measurements</td>
-                    </tr>
-                    <tr>
-                        <td>Generated:</td>
-                        <td>{datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</td>
-                    </tr>
-                    <tr>
-                        <td>Data Source:</td>
-                        <td>Open-Meteo Weather API</td>
-                    </tr>
-                </table>
+            <div class="report-info">
+                <div class="info-section">
+                    <h3>Location Details</h3>
+                    <div class="info-row">
+                        <span class="info-label">Latitude:</span>
+                        <span class="info-value">{latitude}°</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Longitude:</span>
+                        <span class="info-value">{longitude}°</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Data Points:</span>
+                        <span class="info-value">{record_count} records</span>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <h3>Report Information</h3>
+                    <div class="info-row">
+                        <span class="info-label">Time Period:</span>
+                        <span class="info-value">48 hours</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Date Range:</span>
+                        <span class="info-value">{date_range}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Data Source:</span>
+                        <span class="info-value">Open-Meteo API</span>
+                    </div>
+                </div>
             </div>
             
             <div class="summary">
-                <h3 style="margin-top: 0; color: #27ae60;">Summary</h3>
-                <p>This report contains weather data analysis for the specified location over the past 48 hours. 
-                The charts below show temperature and humidity trends, providing insights into recent weather patterns.</p>
+                <h3>Executive Summary</h3>
+                <p>This report presents a comprehensive analysis of meteorological conditions for the specified coordinates over a 48-hour observation period. The data includes temperature variations and relative humidity measurements collected at hourly intervals, providing detailed insights into local weather patterns and environmental conditions.</p>
             </div>
             
-            <div class="chart-container">
-                <h3 style="color: #2c3e50; margin-bottom: 20px;">Weather Trends Analysis</h3>
-                <img src="data:image/png;base64,{chart_base64}" alt="Weather Data Chart" />
+            <div class="chart-section">
+                <h3>Meteorological Trends</h3>
+                <div class="chart-container">
+                    <img src="data:image/png;base64,{chart_base64}" alt="Weather Data Analysis Chart" />
+                </div>
             </div>
             
             <div class="footer">
-                <p>Generated by Weather API Service | Data provided by Open-Meteo</p>
-                <p>This report contains automated analysis of weather data</p>
+                <p><strong>Weather Data Service API</strong> | Automated Report Generation</p>
+                <p>Data provided by Open-Meteo Weather Service</p>
+                <p class="generated-time">Generated: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')}</p>
             </div>
         </body>
         </html>
